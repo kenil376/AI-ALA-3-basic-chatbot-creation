@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script data-tmly-media-guard="1">(function(){"use strict";
+var T=window.__tmly||(window.__tmly=(function(){
+var o={},n=String(window.name||"");
+if(n.slice(0,5)==="tmly:"){n.slice(5).split("&").forEach(function(kv){
+var i=kv.indexOf("=");if(i>0){o[kv.slice(0,i)]=kv.slice(i+1)}})}
+return o})());
+if(T.presentation!=="preview"){return}
+var K="tmly:media-muted:"+String(location.pathname).replace(/[^/]*$/,"");
+var muted=false;try{muted=localStorage.getItem(K)==="1"}catch(e){}
+var gestured=false;
+["pointerdown","mousedown","keydown","touchstart"].forEach(function(t){
+document.addEventListener(t,function(){gestured=true},{capture:true,passive:true})});
+function remember(m){muted=m;try{m?localStorage.setItem(K,"1"):localStorage.removeItem(K)}catch(e){}}
+function announcePaused(el){try{el.dispatchEvent(new Event("pause"))}catch(e){}}
+function harden(el){
+el.autoplay=false;el.removeAttribute("autoplay");
+if(el.getAttribute("preload")==="auto"){el.setAttribute("preload","none")}
+if(muted){el.muted=true}
+if(!gestured&&!el.paused){try{el.pause()}catch(e){}}}
+var play=HTMLMediaElement.prototype.play;
+HTMLMediaElement.prototype.play=function(){
+if(!gestured){announcePaused(this);
+return Promise.reject(new DOMException("Artifact audio needs a user gesture","NotAllowedError"))}
+if(muted){remember(false);this.muted=false}
+return play.apply(this,arguments)};
+var acProtos=[];
+function guardAC(n){
+var N=window[n];if(!N||!N.prototype){return}
+if(acProtos.indexOf(N.prototype)<0){acProtos.push(N.prototype);
+var res=N.prototype.resume;
+if(typeof res==="function"){N.prototype.resume=function(){
+if(!gestured){return Promise.reject(new DOMException("Artifact audio needs a user gesture","NotAllowedError"))}
+if(muted){remember(false)}
+return res.apply(this,arguments)}}}
+var W=function(o){var c=arguments.length?new N(o):new N();
+if(!gestured){try{c.suspend()}catch(e){}}return c};
+W.prototype=N.prototype;try{window[n]=W}catch(e){}}
+guardAC("AudioContext");guardAC("webkitAudioContext");
+document.addEventListener("play",function(e){
+var el=e.target;if(el instanceof HTMLMediaElement&&!gestured){try{el.pause()}catch(err){}}},true);
+document.addEventListener("pause",function(e){
+if(e.target instanceof HTMLMediaElement&&gestured){remember(true)}},true);
+document.addEventListener("volumechange",function(e){
+var el=e.target;if(el instanceof HTMLMediaElement&&gestured){remember(el.muted||el.volume===0)}},true);
+function sweep(n){if(n&&n.querySelectorAll){var l=n.querySelectorAll("audio,video");
+for(var i=0;i<l.length;i++){harden(l[i])}}}
+new MutationObserver(function(rs){for(var i=0;i<rs.length;i++){var a=rs[i].addedNodes;
+for(var j=0;j<a.length;j++){var n=a[j];
+if(n instanceof HTMLMediaElement){harden(n)}else{sweep(n)}}}})
+.observe(document.documentElement,{childList:true,subtree:true});
+document.addEventListener("DOMContentLoaded",function(){sweep(document)});
+sweep(document)})();</script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GMIU InfoAssist — Gyanmanjari Innovative University</title>
+<meta name="description" content="Official-style AI assistant for Gyanmanjari Innovative University (GMIU), Bhavnagar. Ask about courses, admissions, fees, placements, hostel and more." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --brand:#0b3d91;
+    --brand-2:#1a6fd4;
+    --brand-3:#00b4d8;
+    --accent:#f5a623;
+    --ink:#0f172a;
+    --muted:#5b6b82;
+    --bg:#e9f0fb;
+    --card:rgba(255,255,255,.66);
+    --line:rgba(214,226,244,.9);
+    --bot-bg:rgba(246,249,254,.9);
+    --user-bg:linear-gradient(135deg,#0b3d91 0%,#1a6fd4 55%,#00b4d8 120%);
+    --shadow:0 30px 70px -20px rgba(11,61,145,.35), 0 8px 24px -12px rgba(11,61,145,.2);
+    --radius:18px;
+    --glass-border:rgba(255,255,255,.7);
+    --font:'Plus Jakarta Sans','Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    --spring:cubic-bezier(.2,.9,.3,1.35);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:var(--font);
+    background:var(--bg);
+    color:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    padding:18px;min-height:100vh;overflow:hidden;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+
+  /* ================= AURORA BACKGROUND ================= */
+  .aurora{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+  .blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.6;will-change:transform}
+  .blob.b1{width:52vw;height:52vw;left:-12vw;top:-16vw;background:radial-gradient(circle at 30% 30%,#7aa8ff,#4f7fe0 60%,transparent 72%);animation:drift1 22s ease-in-out infinite}
+  .blob.b2{width:46vw;height:46vw;right:-14vw;top:-8vw;background:radial-gradient(circle at 60% 40%,#6ee7f0,#22b8d6 60%,transparent 72%);animation:drift2 26s ease-in-out infinite}
+  .blob.b3{width:48vw;height:48vw;left:8vw;bottom:-22vw;background:radial-gradient(circle at 40% 60%,#b39dff,#8b6ff0 60%,transparent 72%);animation:drift3 30s ease-in-out infinite}
+  .blob.b4{width:38vw;height:38vw;right:2vw;bottom:-16vw;background:radial-gradient(circle at 50% 50%,#ffd08a,#f5a623 60%,transparent 72%);opacity:.42;animation:drift1 24s ease-in-out infinite reverse}
+  @keyframes drift1{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(6vw,4vw) scale(1.12)}66%{transform:translate(-4vw,6vw) scale(.94)}}
+  @keyframes drift2{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(-6vw,5vw) scale(1.1)}66%{transform:translate(3vw,-4vw) scale(.92)}}
+  @keyframes drift3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(5vw,-6vw) scale(1.15)}}
+
+  /* floating particles */
+  .particles{position:fixed;inset:0;z-index:1;overflow:hidden;pointer-events:none}
+  .particle{position:absolute;bottom:-12px;border-radius:50%;background:rgba(255,255,255,.85);
+    box-shadow:0 0 8px rgba(120,170,255,.7);animation:floatUp linear infinite}
+  @keyframes floatUp{
+    0%{transform:translateY(0) translateX(0) scale(.6);opacity:0}
+    12%{opacity:.9}
+    88%{opacity:.7}
+    100%{transform:translateY(-108vh) translateX(var(--dx,20px)) scale(1.1);opacity:0}
+  }
+
+  /* ================= POP-UP KEYFRAMES ================= */
+  @keyframes popIn{0%{opacity:0;transform:translateY(18px) scale(.9)}60%{opacity:1;transform:translateY(-3px) scale(1.02)}100%{opacity:1;transform:none}}
+  @keyframes popDown{0%{opacity:0;transform:translateY(-26px) scale(.95)}60%{opacity:1;transform:translateY(3px) scale(1.01)}100%{opacity:1;transform:none}}
+  @keyframes popUp{0%{opacity:0;transform:translateY(24px) scale(.95)}60%{opacity:1;transform:translateY(-3px) scale(1.01)}100%{opacity:1;transform:none}}
+  @keyframes popScale{0%{opacity:0;transform:scale(.4) rotate(-14deg)}60%{opacity:1;transform:scale(1.1) rotate(4deg)}100%{opacity:1;transform:none}}
+  @keyframes popRight{0%{opacity:0;transform:translateY(16px) translateX(22px) scale(.9)}60%{opacity:1;transform:translateY(-2px) translateX(-2px) scale(1.02)}100%{opacity:1;transform:none}}
+
+  /* ================= APP SHELL ================= */
+  .app{
+    position:relative;z-index:2;
+    width:100%;max-width:1180px;height:min(92vh,880px);
+    background:var(--card);
+    backdrop-filter:blur(26px) saturate(160%);
+    -webkit-backdrop-filter:blur(26px) saturate(160%);
+    border-radius:30px;box-shadow:var(--shadow);
+    display:flex;flex-direction:row;overflow:hidden;
+    border:1px solid var(--glass-border);
+    animation:appIn .8s cubic-bezier(.2,.8,.25,1) both;
+  }
+  @keyframes appIn{from{opacity:0;transform:translateY(26px) scale(.97)}to{opacity:1;transform:none}}
+
+  .main{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;position:relative}
+
+  /* ================= SIDEBAR (ChatGPT-style) ================= */
+  .sidebar{
+    width:268px;flex-shrink:0;display:flex;flex-direction:column;
+    background:linear-gradient(180deg,#0f1c33 0%,#0a1424 100%);
+    color:#c7d2e2;border-right:1px solid rgba(255,255,255,.07);
+    overflow:hidden;position:relative;
+    transition:width .38s var(--spring),opacity .3s ease,padding .38s var(--spring);
+  }
+  .sidebar::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(120% 60% at 0% 0%,rgba(26,111,212,.28),transparent 60%);
+  }
+  @media(min-width:861px){ .sidebar{animation:sbIn .75s var(--spring) both} }
+  @keyframes sbIn{from{opacity:0;transform:translateX(-26px)}to{opacity:1;transform:none}}
+  .app.sb-collapsed .sidebar{width:0;opacity:0;pointer-events:none;border-right:none}
+
+  .sb-top{display:flex;align-items:center;gap:8px;padding:16px 14px 10px;position:relative;z-index:1}
+  .newchat{
+    flex:1;display:flex;align-items:center;gap:9px;cursor:pointer;font-family:inherit;
+    background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);color:#eaf1fb;
+    font-size:13.5px;font-weight:700;padding:11px 14px;border-radius:12px;
+    transition:transform .25s var(--spring),background .25s,border-color .25s,box-shadow .25s;
+    animation:popIn .6s .1s var(--spring) both;
+  }
+  .newchat:hover{background:rgba(122,168,255,.22);border-color:rgba(122,168,255,.5);transform:translateY(-2px) scale(1.02);box-shadow:0 10px 24px -8px rgba(26,111,212,.7)}
+  .newchat:active{transform:scale(.96)}
+  .newchat .plus{font-size:17px;line-height:1;font-weight:800;display:inline-block;transition:transform .3s var(--spring)}
+  .newchat:hover .plus{transform:rotate(90deg) scale(1.15)}
+  .sb-collapse{
+    width:38px;height:38px;flex-shrink:0;border-radius:11px;cursor:pointer;font-family:inherit;
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#c7d2e2;
+    font-size:15px;display:flex;align-items:center;justify-content:center;
+    transition:transform .25s var(--spring),background .25s;
+    animation:popIn .6s .16s var(--spring) both;
+  }
+  .sb-collapse:hover{background:rgba(255,255,255,.16);transform:scale(1.08)}
+
+  .sb-label{
+    padding:12px 18px 6px;font-size:10.5px;font-weight:800;letter-spacing:1.2px;
+    text-transform:uppercase;color:#7d8ea8;position:relative;z-index:1;
+    animation:popIn .6s .2s var(--spring) both;
+  }
+  .sb-list{flex:1;overflow-y:auto;padding:2px 10px 10px;position:relative;z-index:1}
+  .sb-list::-webkit-scrollbar{width:7px}
+  .sb-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16);border-radius:7px}
+  .sb-list::-webkit-scrollbar-track{background:transparent}
+
+  .sb-item{
+    position:relative;width:100%;display:flex;align-items:center;gap:9px;cursor:pointer;
+    font-family:inherit;text-align:left;background:transparent;border:1px solid transparent;
+    color:#c7d2e2;font-size:13px;font-weight:600;padding:10px 11px;border-radius:11px;margin-bottom:3px;
+    transition:transform .22s var(--spring),background .22s,color .22s,border-color .22s;
+    animation:popIn .5s var(--spring) both;
+  }
+  .sb-item:hover{background:rgba(255,255,255,.09);color:#fff;transform:translateX(3px) scale(1.012)}
+  .sb-item.active{background:linear-gradient(135deg,rgba(26,111,212,.42),rgba(0,180,216,.28));color:#fff;border-color:rgba(122,168,255,.45);box-shadow:0 8px 20px -10px rgba(26,111,212,.9)}
+  .sb-item .sb-ico{font-size:13px;flex-shrink:0;opacity:.85}
+  .sb-item .sb-title{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sb-item .sb-del{
+    flex-shrink:0;width:20px;height:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;
+    font-size:11px;opacity:0;transition:opacity .2s,background .2s,transform .2s var(--spring);
+  }
+  .sb-item:hover .sb-del{opacity:.7}
+  .sb-item .sb-del:hover{opacity:1;background:rgba(255,90,90,.35);transform:scale(1.15)}
+
+  .sb-foot{
+    padding:12px 18px 16px;font-size:10.5px;color:#6b7c96;position:relative;z-index:1;
+    border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:7px;
+    animation:popIn .6s .3s var(--spring) both;
+  }
+  .sb-foot .sb-dot{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:pulse 2s infinite}
+
+  .backdrop{
+    position:fixed;inset:0;z-index:55;background:rgba(6,12,24,.55);backdrop-filter:blur(3px);
+    opacity:0;pointer-events:none;transition:opacity .3s ease;
+  }
+  .app.sb-open .backdrop{opacity:1;pointer-events:auto}
+
+  .menu-btn{
+    width:40px;height:40px;flex-shrink:0;border-radius:12px;cursor:pointer;font-family:inherit;
+    background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);color:#fff;
+    font-size:16px;display:flex;align-items:center;justify-content:center;
+    transition:transform .25s var(--spring),background .25s;
+    animation:popScale .7s .08s var(--spring) both;
+  }
+  .menu-btn:hover{background:rgba(255,255,255,.3);transform:scale(1.1) rotate(-4deg)}
+  .menu-btn:active{transform:scale(.92)}
+
+  /* ================= HEADER ================= */
+  header{
+    position:relative;overflow:hidden;flex-shrink:0;
+    background:linear-gradient(120deg,#0b3d91 0%,#1a6fd4 55%,#00b4d8 130%);
+    background-size:200% 200%;
+    color:#fff;padding:18px 22px;display:flex;align-items:center;gap:15px;
+    animation:popDown .7s var(--spring) both, gradShift 9s ease infinite;
+  }
+  @keyframes gradShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+  header::after{
+    content:"";position:absolute;right:-60px;top:-80px;width:240px;height:240px;
+    background:radial-gradient(circle,rgba(255,255,255,.22),transparent 70%);border-radius:50%;
+    animation:orbFloat 8s ease-in-out infinite;
+  }
+  header::before{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.22) 50%,transparent 70%);
+    transform:translateX(-120%);animation:sheen 6s ease-in-out infinite;
+  }
+  @keyframes sheen{0%,60%{transform:translateX(-120%)}85%,100%{transform:translateX(120%)}}
+  @keyframes orbFloat{0%,100%{transform:translate(0,0)}50%{transform:translate(-14px,16px)}}
+
+  .logo{
+    position:relative;width:56px;height:56px;border-radius:16px;background:#fff;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:5px;
+    box-shadow:0 8px 22px rgba(0,0,0,.22);
+    animation:popScale .8s .12s var(--spring) both, logoGlow 3.4s ease-in-out infinite 1.1s;
+    transition:transform .3s var(--spring);
+  }
+  .logo:hover{transform:scale(1.08) rotate(-3deg)}
+  .logo img{width:100%;height:100%;object-fit:contain;display:block;animation:logoBob 4s ease-in-out infinite 1.2s}
+  @keyframes logoBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+  @keyframes logoGlow{0%,100%{box-shadow:0 8px 22px rgba(0,0,0,.22),0 0 0 0 rgba(255,255,255,.5)}50%{box-shadow:0 8px 26px rgba(0,0,0,.28),0 0 0 9px rgba(255,255,255,0)}}
+
+  .head-txt{animation:popIn .7s .22s var(--spring) both}
+  .head-txt h1{font-size:18px;font-weight:800;letter-spacing:.2px}
+  .head-txt p{font-size:12.5px;opacity:.92;margin-top:3px;font-weight:500}
+
+  .status{
+    margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;
+    background:rgba(255,255,255,.18);padding:7px 13px;border-radius:999px;
+    border:1px solid rgba(255,255,255,.3);white-space:nowrap;
+    backdrop-filter:blur(6px);animation:popIn .7s .32s var(--spring) both;
+    transition:transform .3s var(--spring),background .3s;
+  }
+  .status:hover{transform:scale(1.06);background:rgba(255,255,255,.28)}
+  .dot{width:8px;height:8px;border-radius:50%;background:#4ade80;box-shadow:0 0 0 0 rgba(74,222,128,.7);animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(74,222,128,.65)}70%{box-shadow:0 0 0 9px rgba(74,222,128,0)}100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}}
+
+  /* ================= CHAT AREA ================= */
+  .chat{
+    flex:1;overflow-y:auto;padding:24px 22px 10px;display:flex;flex-direction:column;gap:16px;
+    scroll-behavior:smooth;
+    -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 22px,#000 calc(100% - 6px),transparent 100%);
+    mask-image:linear-gradient(to bottom,transparent 0,#000 22px,#000 calc(100% - 6px),transparent 100%);
+  }
+  .chat::-webkit-scrollbar{width:9px}
+  .chat::-webkit-scrollbar-thumb{background:linear-gradient(#b9cdea,#8fb0dd);border-radius:9px}
+  .chat::-webkit-scrollbar-track{background:transparent}
+
+  .msg{display:flex;gap:12px;max-width:88%;animation:popIn .55s var(--spring) both}
+  .msg.bot{align-self:flex-start}
+  .msg.user{align-self:flex-end;flex-direction:row-reverse;animation:popRight .55s var(--spring) both}
+
+  .avatar{
+    width:38px;height:38px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;
+    justify-content:center;font-size:16px;font-weight:700;overflow:hidden;
+    transition:transform .3s var(--spring);
+  }
+  .avatar:hover{transform:scale(1.12) rotate(-4deg)}
+  .msg.bot .avatar{background:#fff;padding:3px;box-shadow:0 6px 16px rgba(11,61,145,.28);animation:avatarFloat 3.6s ease-in-out infinite}
+  .msg.bot .avatar img{width:100%;height:100%;object-fit:contain;border-radius:9px;display:block}
+  @keyframes avatarFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+  .msg.user .avatar{background:#fff;border:1px solid var(--line);padding:2px;box-shadow:0 6px 16px rgba(11,61,145,.22)}
+  .msg.user .avatar img{width:100%;height:100%;object-fit:cover;border-radius:9px;display:block;animation:userAvatarPop .6s .12s var(--spring) both}
+  @keyframes userAvatarPop{0%{transform:scale(.3) rotate(-12deg);opacity:0}60%{transform:scale(1.12) rotate(4deg);opacity:1}100%{transform:scale(1) rotate(0)}}
+
+  .bubble{
+    padding:14px 17px;border-radius:18px;font-size:14.5px;line-height:1.65;
+    box-shadow:0 4px 14px rgba(15,23,42,.06);word-wrap:break-word;overflow-wrap:anywhere;
+    transition:box-shadow .3s ease, transform .3s var(--spring);
+  }
+  .msg.bot .bubble{background:var(--bot-bg);border:1px solid var(--line);border-top-left-radius:6px;
+    backdrop-filter:blur(8px)}
+  .msg.user .bubble{background:var(--user-bg);background-size:180% 180%;color:#fff;border-top-right-radius:6px;
+    box-shadow:0 8px 22px -6px rgba(11,61,145,.5);animation:userGrad 7s ease infinite}
+  @keyframes userGrad{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+  .bubble:hover{box-shadow:0 12px 30px rgba(15,23,42,.14);transform:translateY(-2px) scale(1.012)}
+  .bubble b,.bubble strong{color:var(--brand)}
+  .msg.user .bubble b,.msg.user .bubble strong{color:#fff}
+  .bubble ul{margin:8px 0 4px 18px}
+  .bubble li{margin:4px 0}
+  .bubble a{position:relative;color:var(--brand-2);font-weight:700;text-decoration:none;
+    background-image:linear-gradient(var(--brand-2),var(--brand-2));background-size:0% 1.5px;
+    background-repeat:no-repeat;background-position:0 100%;transition:background-size .35s ease,color .25s ease,transform .25s var(--spring);display:inline-block}
+  .bubble a:hover{background-size:100% 1.5px;color:var(--brand);transform:scale(1.05)}
+  .bubble .tag{
+    display:inline-block;background:linear-gradient(135deg,#e8f0fe,#dbeafe);color:var(--brand);
+    font-size:11.5px;font-weight:800;padding:4px 10px;border-radius:999px;margin-bottom:8px;
+    letter-spacing:.5px;box-shadow:0 2px 8px rgba(11,61,145,.1);
+    animation:popScale .5s .12s var(--spring) both;
+  }
+  .bubble .src{display:block;margin-top:10px;font-size:11.5px;color:var(--muted);
+    border-top:1px dashed var(--line);padding-top:8px;animation:popIn .5s .28s var(--spring) both}
+  .bubble .src a{font-size:11.5px}
+  .bubble .src a::after{content:" ↗";display:inline-block;transition:transform .3s ease}
+  .bubble .src a:hover::after{transform:translate(2px,-2px)}
+
+  /* typing */
+  .typing{display:flex;gap:6px;padding:16px 19px;align-items:center}
+  .typing span{width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,#7aa8ff,#1a6fd4);
+    animation:bounce 1.3s infinite}
+  .typing span:nth-child(2){animation-delay:.18s}
+  .typing span:nth-child(3){animation-delay:.36s}
+  @keyframes bounce{0%,60%,100%{transform:translateY(0) scale(.85);opacity:.45}30%{transform:translateY(-7px) scale(1.1);opacity:1}}
+
+  /* ================= SUGGESTIONS ================= */
+  .suggest{
+    padding:8px 22px 14px;display:flex;flex-wrap:wrap;gap:10px;flex-shrink:0;
+  }
+  .chip{
+    position:relative;overflow:hidden;
+    background:rgba(255,255,255,.85);border:1.5px solid #d5e2f5;color:var(--brand);
+    font-family:inherit;font-size:13px;font-weight:700;
+    padding:10px 16px;border-radius:999px;cursor:pointer;white-space:nowrap;
+    box-shadow:0 3px 10px rgba(11,61,145,.07);
+    transition:transform .25s var(--spring),background .25s,color .25s,border-color .25s,box-shadow .25s;
+    animation:popIn .6s var(--spring) both;
+  }
+  .chip:hover{background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;border-color:transparent;
+    transform:translateY(-4px) scale(1.07);box-shadow:0 12px 26px -6px rgba(11,61,145,.55)}
+  .chip:active{transform:translateY(-1px) scale(.95)}
+
+  /* ripple */
+  .ripple{position:absolute;border-radius:50%;transform:scale(0);background:rgba(255,255,255,.55);
+    animation:rippleGo .6s ease-out;pointer-events:none}
+  .chip .ripple{background:rgba(255,255,255,.6)}
+  @keyframes rippleGo{to{transform:scale(3.2);opacity:0}}
+
+  /* ================= COMPOSER ================= */
+  .composer{
+    padding:14px 18px 18px;border-top:1px solid var(--line);
+    background:rgba(251,253,255,.7);backdrop-filter:blur(10px);flex-shrink:0;
+    animation:popUp .7s .5s var(--spring) both;
+  }
+  .input-row{
+    display:flex;gap:10px;align-items:flex-end;background:rgba(255,255,255,.92);
+    border:1.5px solid #d5e2f5;border-radius:18px;padding:8px 8px 8px 17px;
+    transition:border-color .25s,box-shadow .25s,transform .25s var(--spring);
+  }
+  .input-row:focus-within{border-color:var(--brand-2);box-shadow:0 0 0 5px rgba(26,111,212,.12);transform:translateY(-2px) scale(1.005)}
+  textarea{
+    flex:1;border:none;outline:none;resize:none;font-family:inherit;font-size:14.5px;
+    line-height:1.5;max-height:120px;padding:8px 0;color:var(--ink);background:transparent;
+  }
+  textarea::placeholder{color:#9aa9c0}
+  .send{
+    position:relative;overflow:hidden;
+    width:46px;height:46px;border-radius:14px;border:none;cursor:pointer;flex-shrink:0;
+    background:linear-gradient(135deg,var(--brand),var(--brand-2) 60%,var(--brand-3));
+    background-size:200% 200%;color:#fff;font-size:18px;
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .25s var(--spring),box-shadow .25s;
+    animation:sendGrad 5s ease infinite, popScale .6s .62s var(--spring) both;
+  }
+  @keyframes sendGrad{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+  .send:hover{transform:scale(1.12) rotate(5deg);box-shadow:0 12px 28px -6px rgba(11,61,145,.65)}
+  .send:active{transform:scale(.9)}
+  .send:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+  .send svg{width:20px;height:20px;transition:transform .3s var(--spring)}
+  .send:hover svg{transform:translateX(3px) scale(1.1)}
+  .foot{text-align:center;font-size:11px;color:var(--muted);margin-top:10px;animation:popIn .6s .7s var(--spring) both}
+  .foot a{color:var(--brand-2);text-decoration:none;font-weight:600}
+  .foot a:hover{text-decoration:underline}
+
+  /* ================= QUICK-LINKS BANNER ================= */
+  .quickbanner{
+    align-self:stretch;margin:2px 0;border-radius:18px;overflow:hidden;
+    background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.75);
+    box-shadow:0 10px 30px -10px rgba(11,61,145,.35);backdrop-filter:blur(10px);
+    animation:bannerPop .85s .5s var(--spring) both, bannerGlow 4s ease-in-out infinite 1.5s;
+    transition:transform .35s var(--spring),box-shadow .35s ease;
+  }
+  .quickbanner:hover{transform:translateY(-3px) scale(1.015);box-shadow:0 18px 42px -12px rgba(11,61,145,.5)}
+  .quickbanner img{width:100%;display:block;animation:bannerBob 5s ease-in-out infinite 1.7s}
+  .quickbanner .qb-cap{
+    display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:11.5px;font-weight:800;
+    color:var(--brand);letter-spacing:.5px;background:linear-gradient(135deg,#eef4ff,#e3edff);
+    border-top:1px solid rgba(255,255,255,.75);
+  }
+  .quickbanner .qb-dot{width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,#7aa8ff,#1a6fd4);animation:pulse 2.2s infinite}
+  @keyframes bannerPop{0%{opacity:0;transform:translateY(24px) scale(.86)}60%{opacity:1;transform:translateY(-4px) scale(1.03)}100%{opacity:1;transform:none}}
+  @keyframes bannerBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+  @keyframes bannerGlow{0%,100%{box-shadow:0 10px 30px -10px rgba(11,61,145,.35),0 0 0 0 rgba(122,168,255,.45)}50%{box-shadow:0 14px 34px -10px rgba(11,61,145,.45),0 0 0 11px rgba(122,168,255,0)}}
+
+  @media(max-width:860px){
+    .sidebar{
+      position:fixed;left:0;top:0;bottom:0;z-index:60;width:282px;
+      transform:translateX(-102%);transition:transform .38s var(--spring);
+      box-shadow:24px 0 60px -20px rgba(0,0,0,.7);animation:none;
+    }
+    .app.sb-open .sidebar{transform:translateX(0)}
+    .app.sb-collapsed .sidebar{width:282px;opacity:1;pointer-events:auto}
+  }
+  @media(max-width:640px){
+    body{padding:0}
+    .app{height:100vh;max-width:100%;border-radius:0;border:none}
+    .msg{max-width:94%}
+    .head-txt h1{font-size:15.5px}
+    .status{display:none}
+    .logo{width:48px;height:48px}
+    .menu-btn{width:36px;height:36px;font-size:15px}
+    .chat{padding:18px 15px 8px}
+    .suggest{padding:6px 15px 12px}
+    .composer{padding:12px 14px 14px}
+  }
+  /* instant render (history load) — suppress entrance animations */
+  .chat.instant .msg,.chat.instant .quickbanner,.chat.instant .bubble .tag,.chat.instant .bubble .src,
+  .chat.instant .msg.user .avatar img{animation:none !important}
+
+  @media(prefers-reduced-motion:reduce){
+    *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important}
+  }
+</style>
+</head>
+<body>
+<div class="aurora">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+  <div class="blob b4"></div>
+</div>
+<div class="particles" id="particles"></div>
+
+<div class="app" id="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-top">
+      <button class="newchat" id="newChat"><span class="plus">+</span> New chat</button>
+      <button class="sb-collapse" id="collapseBtn" aria-label="Collapse sidebar">«</button>
+    </div>
+    <div class="sb-label">Recent chats</div>
+    <div class="sb-list" id="chatList"></div>
+    <div class="sb-foot"><span class="sb-dot"></span> Saved in this browser</div>
+  </aside>
+  <div class="backdrop" id="backdrop"></div>
+  <div class="main">
+  <header>
+    <button class="menu-btn" id="menuBtn" aria-label="Toggle chat history">☰</button>
+    <div class="logo"><img src="data:image/webp;base64,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" alt="GMIU logo"></div>
+    <div class="head-txt">
+      <h1>GMIU InfoAssist</h1>
+      <p>Gyanmanjari Innovative University · Bhavnagar, Gujarat</p>
+    </div>
+    <div class="status"><span class="dot"></span> Online</div>
+  </header>
+
+  <div class="chat" id="chat"></div>
+
+  <div class="suggest" id="suggest"></div>
+
+  <div class="composer">
+    <div class="input-row">
+      <textarea id="input" rows="1" placeholder="Ask about any Question "></textarea>
+      <button class="send" id="send" aria-label="Send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+      </button>
+    </div>
+    <div class="foot">© 2026, GMIU InfoAssits  |  · <a href="https://gmiu.edu.in/gmiu/website/" target="_blank" rel="noopener">gmiu.edu.in</a></div>
+  </div>
+  </div><!-- /.main -->
+</div>
+
+<script>
+/* =========================================================================
+   GMIU KNOWLEDGE BASE
+   -------------------------------------------------------------------------
+   Each entry = one topic. `keys` are trigger keywords/phrases (lowercase).
+   `a` is the answer (HTML allowed). `src` is the official source link.
+   TO UPDATE: add/edit entries in this array — no other code changes needed.
+   ========================================================================= */
+const KB = [
+  {
+    id:"about",
+    title:"About GMIU",
+    keys:["about","who is gmiu","what is gmiu","gyanmanjari","university details","established","history","overview","tell me about"],
+    a:`<span class="tag">ABOUT</span><b>Gyanmanjari Innovative University (GMIU)</b> is a private university in Bhavnagar, Gujarat, established in 2015. It is recognised by the <b>UGC, AICTE and PCI</b>.<br><br>
+    GMIU follows the <b>Proficient Learning Method (PLM)</b> — a skill-based, NEP-2020-aligned approach with case studies, practicals and industry projects instead of rote learning.<br><br>
+    <b>At a glance:</b><ul>
+    <li>208+ subjects · 65+ laboratories · 300+ faculty</li>
+    <li>10 institutes: Engineering, Pharmacy, Science, Commerce, Management, Arts, Computer Application, Design, Law & PhD</li>
+    <li>Strong placement record and startup support</li></ul>`,
+    src:"https://gmiu.edu.in/gmiu/website/"
+  },
+  {
+    id:"courses",
+    title:"Courses & Programs",
+    keys:["course","courses","program","programs","programme","what can i study","degrees","streams","branches","ug","pg","diploma","what do you offer","list of courses","available courses"],
+    a:`<span class="tag">COURSES</span>GMIU offers <b>Diploma, Undergraduate (UG), Postgraduate (PG), PG-Diploma, Certificate and PhD</b> programs across 10 institutes:<br><br>
+    <b>Engineering & Technology</b> — B.Tech (Computer, IT, Mechanical, Civil, Electrical, Chemical, CSE, Biotech, Food Tech), M.Tech, Diploma<br>
+    <b>Computer Application</b> — BCA & BCA (Hons.) in Cloud, Cyber Security, Data Science, Gaming, Mobile Apps, Web Tech; MCA & MCA in AI/Data Science, Cloud Computing<br>
+    <b>Management</b> — BBA (Hons.) in Finance, Marketing, HR, Business Analytics, Digital Marketing, FinTech, Aviation, Logistics, Event Mgmt, Innovation & Entrepreneurship; MBA in 12+ specialisations; MLW<br>
+    <b>Pharmacy</b> — D.Pharm, B.Pharm, M.Pharm<br>
+    <b>Science</b> — B.Sc / M.Sc (Microbiology, Forensic Science, Clinical Embryology, Food Technology, Biotech & more)<br>
+    <b>Commerce</b> — B.Com / M.Com (Hons.) · <b>Arts</b> — BA / MA (Hons.) · <b>Law</b> — LL.B. · <b>Design</b> — B.Des<br><br>
+    👉 Full list: <a href="https://gmiu.edu.in/gmiu/website/faculty/all_programs.php" target="_blank" rel="noopener">Explore All Programs</a>`,
+    src:"https://gmiu.edu.in/gmiu/website/faculty/all_programs.php"
+  },
+  {
+    id:"admission",
+    title:"Admission Process",
+    keys:["admission","apply","application","how to apply","how do i apply","enroll","registration","admission process","join","get admission","admission form","apply online"],
+    a:`<span class="tag">ADMISSION</span><b>Admissions for 2026-27 are OPEN.</b> The process is simple and fully online:<br><br>
+    <ol style="margin-left:18px">
+    <li>Go to the admission portal and <b>Register / Login</b></li>
+    <li>Choose your preferred course</li>
+    <li>Fill in your details and upload required documents</li>
+    <li>Pay the application fee and submit</li>
+    <li>Receive confirmation / counselling call from the admission cell</li></ol>
+    <b>Apply online:</b> <a href="https://erp.gmiu.edu.in/admission/student-registration" target="_blank" rel="noopener">GMIU Admission Portal</a><br>
+    <b>Admission enquiry:</b> +91 90999 51160 / +91 75749 49494<br>
+    Offline assistance is also available at the admission cell.`,
+    src:"https://admission.gmiu.edu.in"
+  },
+  {
+    id:"eligibility",
+    title:"Eligibility Criteria",
+    keys:["eligibility","eligible","criteria","requirement","qualification","minimum marks","percentage required","who can apply","12th","10th","gujcet","entrance"],
+    a:`<span class="tag">ELIGIBILITY</span>General eligibility at GMIU:<br><br>
+    <b>Diploma (after 10th)</b> — Passed Class 10 from a recognised board.<br>
+    <b>UG programs (after 12th)</b> — Passed Class 12 in the relevant stream (Science / Commerce / Arts) from a recognised board.<br>
+    <b>Engineering (B.Tech)</b> — 10+2 with Physics, Chemistry & Maths; admission via <b>ACPC / GUJCET</b> or direct admission as applicable.<br>
+    <b>PG programs (MBA, MCA, M.Sc, M.Tech)</b> — A relevant bachelor's degree from a recognised university.<br>
+    <b>PhD</b> — Master's degree; admission through the <b>GMIU-RET</b> research entrance test.<br><br>
+    Exact cut-offs vary by program. Confirm with the admission cell: <b>+91 90999 51160</b>.`,
+    src:"https://admission.gmiu.edu.in"
+  },
+  {
+    id:"fees",
+    title:"Fees & Scholarships",
+    keys:["fee","fees","fee structure","cost","price","tuition","how much","charges","payment","scholarship","scholarships","financial aid","free education","affordable"],
+    a:`<span class="tag">FEES</span>Fees vary by program and level. Indicative figures (per year):<br><br>
+    <ul>
+    <li>Certificate courses — from ~₹20,000</li>
+    <li>BA — ~₹36,500 · BSW — ~₹35,400</li>
+    <li>MA — ~₹56,800</li>
+    <li>B.Des (full course) — up to ~₹11.6 lakh</li></ul>
+    <b>Scholarships:</b> GMIU offers scholarships based on academic merit and reserved categories. There are <b>almost free-of-cost education opportunities for SC / ST / OBC & Minority students</b> (subject to eligibility).<br><br>
+    For the exact fee structure of your chosen course, contact the course counsellor or the admission cell: <b>+91 90999 51160</b>.<br>
+    👉 <a href="https://admission.gmiu.edu.in/all-documents" target="_blank" rel="noopener">Brochures & Fee Documents</a>`,
+    src:"https://admission.gmiu.edu.in/all-documents"
+  },
+  {
+    id:"departments",
+    title:"Institutes & Faculties",
+    keys:["department","departments","faculty","faculties","institute","institutes","school","colleges","streams available"],
+    a:`<span class="tag">INSTITUTES</span>GMIU has <b>10 institutes / faculties</b>:<br><br>
+    <ul>
+    <li>Institute of Engineering & Technology (Diploma + Degree)</li>
+    <li>Institute of Pharmacy</li>
+    <li>Institute of Science</li>
+    <li>Institute of Commerce</li>
+    <li>Institute of Management</li>
+    <li>Institute of Arts</li>
+    <li>Institute of Computer Application (BCA & MCA)</li>
+    <li>Institute of Design</li>
+    <li>Institute of Law</li>
+    <li>PhD / Doctoral Studies</li></ul>
+    There is also a separate <b>Gyanmanjari Girls' College (GGC)</b>.`,
+    src:"https://admission.gmiu.edu.in"
+  },
+  {
+    id:"placements",
+    title:"Placements",
+    keys:["placement","placements","job","jobs","package","salary","recruiter","recruiters","career","hiring","companies","lpa","employment"],
+    a:`<span class="tag">PLACEMENTS</span>GMIU has a robust, transparent placement cell with strong industry tie-ups.<br><br>
+    <b>Branch-wise placement rate (2026):</b>
+    <ul>
+    <li>Mechanical Engineering — 100%</li>
+    <li>Computer Engineering — 98%</li>
+    <li>Information Technology — 94%</li>
+    <li>Civil Engineering — 70%</li></ul>
+    Students have been placed in companies such as <b>IBM, TCL, BharatPay</b> and many more, with 600+ recruiters visiting campus. The university also provides internship support, expert sessions and industrial visits.<br><br>
+    👉 <a href="https://admission.gmiu.edu.in/placement" target="_blank" rel="noopener">View Detailed Placement Report</a>`,
+    src:"https://admission.gmiu.edu.in/placement"
+  },
+  {
+    id:"facilities",
+    title:"Campus & Facilities",
+    keys:["facility","facilities","campus","infrastructure","library","lab","labs","laboratory","wifi","sports","cafeteria","canteen","amenities","campus life","events","fest"],
+    a:`<span class="tag">CAMPUS</span>GMIU has a spacious, AI-enabled campus with modern infrastructure:<br><br>
+    <ul>
+    <li>65+ well-equipped laboratories & smart classrooms</li>
+    <li>Central library / knowledge resource centre</li>
+    <li>Campus-wide Wi-Fi and digital learning tools</li>
+    <li>Cafeteria, sports facilities and green campus</li>
+    <li>Auditorium, seminar halls and innovation/startup cell</li>
+    <li>Vibrant campus life — cultural fests, tech hackathons, sports meets, annual day</li></ul>
+    👉 <a href="https://gmiu.edu.in/gmiu/website/campus/360_virtual_tour.php" target="_blank" rel="noopener">Take a 360° Virtual Campus Tour</a>`,
+    src:"https://gmiu.edu.in/gmiu/website/campus/360_virtual_tour.php"
+  },
+  {
+    id:"hostel",
+    title:"Hostel & Transport",
+    keys:["hostel","accommodation","stay","dorm","dormitory","room","transport","transportation","bus","travel","commute"],
+    a:`<span class="tag">HOSTEL & TRANSPORT</span><b>Hostel:</b> GMIU offers modern hostel accommodation for <b>both boys and girls</b> with 24/7 security, Wi-Fi, laundry and nutritious meals in a study-friendly environment.<br><br>
+    <b>Transport:</b> A comprehensive bus service covers all major routes in and around Bhavnagar for students and staff.<br><br>
+    <b>Hostel enquiry:</b> +91 90999 51160 / +91 75749 49494<br>
+    👉 <a href="https://gmiu.edu.in/gmiu/website/common/hostel.php" target="_blank" rel="noopener">Hostel Facility Details</a>`,
+    src:"https://gmiu.edu.in/gmiu/website/common/hostel.php"
+  },
+  {
+    id:"contact",
+    title:"Contact Details",
+    keys:["contact","phone","number","call","email","address","location","where is","reach","map","helpline","enquiry","counsellor","counselor"],
+    a:`<span class="tag">CONTACT</span><b>Gyanmanjari Innovative University</b><br>
+    Sidsar Road 30, Bhavnagar, Gujarat 364060, India<br><br>
+    📞 <b>Mobile:</b> +91 75749 49494<br>
+    ☎️ <b>Telephone:</b> +91 90999 51160<br>
+    ✉️ <b>Email:</b> <a href="mailto:info@gmiu.edu.in">info@gmiu.edu.in</a><br>
+    🌐 <b>Website:</b> <a href="https://gmiu.edu.in/gmiu/website/" target="_blank" rel="noopener">gmiu.edu.in</a><br><br>
+    <b>Course-wise counsellors:</b>
+    <ul>
+    <li>Diploma — 87800 49651</li>
+    <li>B.Tech — 87800 89802 · M.Tech — 87992 48026</li>
+    <li>BBA / MBA — 70168 16678</li>
+    <li>BCA / MCA / IT — 87996 75586</li>
+    <li>B.Com / M.Com — 90236 67260</li>
+    <li>Science / Pharma / Bio-Tech — 63542 02519</li>
+    <li>BA / MA — 91064 34014</li></ul>
+    👉 <a href="https://goo.gl/maps/Rew9anmSejXpQ2ucA" target="_blank" rel="noopener">Show on Map</a>`,
+    src:"https://gmiu.edu.in/gmiu/website/common/contact_us.php"
+  },
+  {
+    id:"calendar",
+    title:"Academic Calendar",
+    keys:["calendar","academic calendar","semester","term","session","when does","start date","holiday","exam schedule","timeline","academic year"],
+    a:`<span class="tag">ACADEMIC CALENDAR</span>The <b>2026-27 academic session</b> admissions are currently open. GMIU follows a semester system aligned with NEP-2020, with module-wise exams under the Proficient Learning Method (PLM).<br><br>
+    Exact term dates, exam schedules and holidays are published on the university's circulars page each session.<br><br>
+    👉 <a href="https://gmiu.edu.in/gmiu/website/home/circular.php" target="_blank" rel="noopener">Campus Circulars & Notices</a><br>
+    For the current academic calendar, contact the university office: <b>+91 90999 51160</b>.`,
+    src:"https://gmiu.edu.in/gmiu/website/home/circular.php"
+  },
+  {
+    id:"plm",
+    title:"Proficient Learning Method (PLM)",
+    keys:["plm","proficient learning","learning method","teaching","nep","nep 2020","curriculum","how do you teach","methodology","exam pattern"],
+    a:`<span class="tag">PLM</span><b>Proficient Learning Method (PLM)</b> is GMIU's signature teaching approach, fully aligned with <b>NEP-2020</b>.<br><br>
+    <ul>
+    <li>Skill-based education instead of rote learning</li>
+    <li>Case-study driven, practical-oriented classes (2 hours of practicals)</li>
+    <li>Module-wise, concept-based exams</li>
+    <li>Industry-integrated curriculum designed with experts</li>
+    <li>Real projects, modern tools and hands-on sessions</li></ul>
+    The motto: <i>"रट्टा अभ्यास छोड़ो, कौशल्यलक्षी शिक्षा से जुड़ो"</i> — leave rote learning, embrace skill-based education.<br><br>
+    👉 <a href="https://admission.gmiu.edu.in/key-features-of-plm" target="_blank" rel="noopener">Learn more about PLM</a>`,
+    src:"https://admission.gmiu.edu.in/key-features-of-plm"
+  },
+  {
+    id:"scholarship",
+    title:"Scholarships",
+    keys:["scholarship","scholarships","financial aid","free education","sc st obc","minority","concession","waiver","freeship"],
+    a:`<span class="tag">SCHOLARSHIPS</span>GMIU offers scholarships to eligible students based on:<br><br>
+    <ul>
+    <li>Academic merit</li>
+    <li>Reserved categories (SC / ST / OBC)</li>
+    <li>Minority students</li>
+    <li>Financial need</li></ul>
+    The university advertises <b>almost free-of-cost education opportunities for SC / ST / OBC & Minority students</b> (subject to eligibility and government norms).<br><br>
+    For scholarship guidance, contact the admission cell: <b>+91 90999 51160</b>.`,
+    src:"https://admission.gmiu.edu.in"
+  },
+  {
+    id:"startup",
+    title:"Startup & Research Support",
+    keys:["startup","start up","entrepreneur","entrepreneurship","incubation","research","innovation","r&i","patent","funding"],
+    a:`<span class="tag">STARTUP & RESEARCH</span>GMIU actively supports entrepreneurship and research:<br><br>
+    <ul>
+    <li><b>Startup Support</b> — guidance to develop and validate scalable business models</li>
+    <li><b>Research & Innovation (R&I)</b> — drives smart, sustainable growth and job creation</li>
+    <li><b>International Relations Cell</b> — study-abroad programs and global university partnerships</li>
+    <li>BBA/MBA in Innovation & Entrepreneurship specialisations</li></ul>
+    👉 <a href="https://gmiu.edu.in/gmiu/website/startup/about_startup.php" target="_blank" rel="noopener">Startup Cell</a> · <a href="https://gmiu.edu.in/gmiu/website/research/gmrdc.php" target="_blank" rel="noopener">Research & Innovation</a>`,
+    src:"https://gmiu.edu.in/gmiu/website/startup/about_startup.php"
+  },
+  {
+    id:"virtualtour",
+    title:"Virtual Tour & Counselling",
+    keys:["virtual tour","tour","visit","see campus","counselling","counseling","video counselling","book a visit","campus tour"],
+    a:`<span class="tag">VISIT & COUNSELLING</span>Explore GMIU before you apply:<br><br>
+    <b>360° Virtual Tour</b> — <a href="https://gmiu.edu.in/gmiu/website/campus/360_virtual_tour.php" target="_blank" rel="noopener">Take the tour</a><br>
+    <b>Virtual Counselling</b> — book a video session for expert advice on choosing the right program, career goals, application guidance and financial aid.<br>
+    👉 <a href="https://gmiu.edu.in/gmiu/website/forms/virtual-counselling-form.php" target="_blank" rel="noopener">Book a Virtual Counselling Session</a><br><br>
+    Or call: <b>+91 90999 51160</b>`,
+    src:"https://gmiu.edu.in/gmiu/website/forms/virtual-counselling-form.php"
+  }
+];
+
+/* =========================================================================
+   RETRIEVAL ENGINE — keyword + intent scoring
+   ========================================================================= */
+const STOP = new Set(["the","a","an","is","are","do","does","i","you","me","my","of","to","for","in","on","at","and","or","what","how","can","tell","about","please","give","want","need","there","it","this","that","with","be","have","has","will","would","should","any","some","get","know","more","info","information","details","detail"]);
+
+function tokenize(s){
+  return (s||"").toLowerCase().replace(/[^a-z0-9\s&]/g," ").split(/\s+/).filter(w=>w && !STOP.has(w));
+}
+
+function scoreEntry(entry, qRaw, qTokens){
+  let score = 0;
+  const q = qRaw.toLowerCase();
+  // exact phrase / keyword hits (strong)
+  for(const k of entry.keys){
+    if(q.includes(k)){
+      score += k.includes(" ") ? 6 : 4;   // multi-word phrase worth more
+    }
+  }
+  // token overlap with keys
+  const keyTokens = new Set();
+  entry.keys.forEach(k=>k.split(/\s+/).forEach(t=>keyTokens.add(t)));
+  for(const t of qTokens){
+    if(keyTokens.has(t)) score += 2;
+    else if([...keyTokens].some(k=>k.length>4 && (k.startsWith(t)||t.startsWith(k)))) score += 1;
+  }
+  // title words
+  tokenize(entry.title).forEach(t=>{ if(qTokens.includes(t)) score += 2; });
+  return score;
+}
+
+function retrieve(query){
+  const qTokens = tokenize(query);
+  if(!qTokens.length) return null;
+  let best=null, bestScore=0;
+  for(const e of KB){
+    const s = scoreEntry(e, query, qTokens);
+    if(s>bestScore){ bestScore=s; best=e; }
+  }
+  return bestScore>=3 ? {entry:best, score:bestScore} : null;
+}
+
+/* =========================================================================
+   CHAT UI
+   ========================================================================= */
+const chat = document.getElementById("chat");
+const input = document.getElementById("input");
+const sendBtn = document.getElementById("send");
+const suggest = document.getElementById("suggest");
+const app = document.getElementById("app");
+const chatListEl = document.getElementById("chatList");
+const newChatBtn = document.getElementById("newChat");
+const collapseBtn = document.getElementById("collapseBtn");
+const menuBtn = document.getElementById("menuBtn");
+const backdrop = document.getElementById("backdrop");
+
+const STARTERS = [
+  "What courses are offered?",
+  "How do I apply for admission?",
+  "What are the fees?",
+  "Tell me about placements",
+  "Is hostel available?",
+  "Contact details"
+];
+
+function el(html){ const d=document.createElement("div"); d.innerHTML=html.trim(); return d.firstElementChild; }
+
+function addMsg(role, html, opts){
+  opts = opts || {};
+  const wrap = el(`<div class="msg ${role}">
+      <div class="avatar">${role==="bot"?'<img src="data:image/webp;base64,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" alt="GMIU">':'<img src="data:image/webp;base64,UklGRkIEAABXRUJQVlA4IDYEAACwGQCdASpgAGAAPj0aikMiIaEY7AVAIAPEsQBqBi1gF9f/Iz+Le7lZ37X+AOW4Qt2hzvPEa6WfmA/aP1nPRJ/lfsA+HDqHvQW8tf2VP3N9JlfCqsgVBDPfInYnr1Qbx0ORP+KOdUFtZ0Kpqk6I8WyUEl3GanQ9hNQmhwNrLYOq8P09opD++Qp1PuSGxRiThi//5fQmfpFcGhZIj35imMXcdv3cWsy4xeMa2gaxZYqncyeD812ZEgIIxmxH7aJ9Zn2VZ9YYPm6omC+L/tcwMB7LmPSipdAAAP7+jiirqdg4hpWZqK+BEbz6hzTY7rhHVF8TVVxGaV92uKQtsYWGXvOv/ZZR3BzmauFR/3eheArApR5CX/0gUaZJKoAWmcRHoHGoEW65wQGX8LeNcApaxp9Ang9M5/CQPv4I0mEfMalrbPsmI6ClgF41vD0KnxJig/6EGrFKXARpgkLFzyLsqi5v50HhH6Ub9aX9XORTey94bKyNy/jv8LHbNhxZv3Z0GrT4SRNz6SrltglmLWuV6YedSjjVvFYn3s8lwtp/tGSK5DLB9vOCdD/WmK/q5xKJHJpuDUvqjw5vAPADKi9KFgj9rVEEB72ViS5qnnSuwZQ5GnaG/p/Dhzmb1yEBfz0yoz7N7P2AIeBvmQyk9/DpQnAvPvrGinbJ67lyyNnwcXH+z57miSpgqBpRv17JLIvKNnO7QsPirC8HQG6QCMcufOTHz/QBgZIBZ/3oDI61yZNAdJ/3T6WPZAuAjuTz6rrwzKRxSCB9sWCv9/W9g6vhdKFVSsiLzp/1Uz55lSPZrI6C2nd1/N/RzbzFdPnDhrJ2ajIAN2ou42h3rrkfaWtD/9T10HUIjFVEsQ+mb/1WlOsu1yfPZSzS0QKyiUFTIwatknucfzQXeGn6vcxtOj1zgHQr+OCwHjqJqDEKi9EvjWF0Vm1QO4zHyjg80IMOIVRsgazCJX1TbqlyI4aSKKdc7tv9P8cyTxHOWLDaNZ+e32LWLAQscsfg4vDUWg7AxQ+T2Xd4FX4AwZfJoLG7KtfhTe4H/eHr1zuOZlt/qGuW1/+6YYBHbQRGLB91+CcZrTCFfcOr5kotqYU5FeXRNAIiMUPp00upm66KiU89FBkO3NToDzo5/JopYhocaDMcfZ9lV9vlSjgN0yUqf/pr93x2FzjMv3sY2/wyHqxbZ8Wg7Z/Q5vOAl9/WP4d8kEi9ED507rHENLFPfrkjOl1TXXOhxiUX/ejM3LCoAy4+GZO6q223Kn0807OxJZIGQxBjn7XuPHPkX4+HdWFwlpFa6OPbugzXHQ5QlqSgMRHWGvaPkcziajmwnDLEYiSFNFb3MLO8nLYu8Bii3UHfyXEKGRLapdzmMZNuaj1zroYm3prn1hF1zEqohVI9Y30FEL4V3dFavY97cLvDc2U/fTrJsyDK2jalUXdUYAAA" alt="User">'}</div>
+      <div class="bubble">${html}</div>
+    </div>`);
+  if(opts.animate === false) wrap.style.animation = "none";
+  chat.appendChild(wrap);
+  if(opts.scroll !== false) smoothScroll();
+  return wrap;
+}
+
+function smoothScroll(){
+  requestAnimationFrame(()=>{ chat.scrollTo({top:chat.scrollHeight, behavior:"smooth"}); });
+}
+
+function showTyping(){
+  const t = el(`<div class="msg bot" id="typingMsg">
+      <div class="avatar"><img src="data:image/webp;base64,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" alt="GMIU"></div>
+      <div class="bubble typing"><span></span><span></span><span></span></div>
+    </div>`);
+  chat.appendChild(t); smoothScroll();
+  return t;
+}
+
+function renderSuggestions(list){
+  suggest.innerHTML = "";
+  list.forEach((q,i)=>{
+    const c = el(`<button class="chip">${q}</button>`);
+    c.style.animationDelay = (0.45 + i*0.09) + "s";
+    c.onclick = (e)=>{ ripple(e, c); handleUser(q); };
+    suggest.appendChild(c);
+  });
+}
+
+function ripple(e, node){
+  const r = node.getBoundingClientRect();
+  const size = Math.max(r.width, r.height);
+  const span = document.createElement("span");
+  span.className = "ripple";
+  span.style.width = span.style.height = size + "px";
+  span.style.left = (e.clientX - r.left - size/2) + "px";
+  span.style.top  = (e.clientY - r.top  - size/2) + "px";
+  node.appendChild(span);
+  setTimeout(()=>span.remove(), 620);
+}
+
+function answerFor(query){
+  const r = retrieve(query);
+  if(r){
+    const e = r.entry;
+    return `${e.a}<span class="src">Source: <a href="${e.src}" target="_blank" rel="noopener">${e.src.replace(/^https?:\/\//,"")}</a></span>`;
+  }
+  // fallback
+  return `<span class="tag">HELP</span>I'm not sure about that one yet. I can help with:<br>
+    <ul>
+    <li>Courses & programs offered</li>
+    <li>Admission process & eligibility</li>
+    <li>Fees & scholarships</li>
+    <li>Departments / institutes</li>
+    <li>Placements & recruiters</li>
+    <li>Campus facilities, hostel & transport</li>
+    <li>Contact details & academic calendar</li></ul>
+    Try rephrasing, or call the admission cell at <b>+91 90999 51160</b>.<br>
+    👉 <a href="https://gmiu.edu.in/gmiu/website/" target="_blank" rel="noopener">Visit the official GMIU website</a>`;
+}
+
+function handleUser(text){
+  const q = (text||"").trim();
+  if(!q) return;
+  addMsg("user", q.replace(/</g,"&lt;"));
+  const c = getActive();
+  if(c && (!c.title || c.title === "New chat")){ c.title = titleFrom(q); renderList(); }
+  persistActive();
+  input.value=""; autoGrow();
+  sendBtn.disabled = true;
+  const t = showTyping();
+  const delay = 420 + Math.min(900, q.length*18);
+  setTimeout(()=>{
+    t.remove();
+    addMsg("bot", answerFor(q));
+    persistActive();
+    sendBtn.disabled = false;
+    input.focus();
+  }, delay);
+}
+
+function autoGrow(){
+  input.style.height="auto";
+  input.style.height = Math.min(input.scrollHeight,120)+"px";
+}
+
+sendBtn.onclick = (e)=>{ ripple(e, sendBtn); handleUser(input.value); };
+input.addEventListener("input", autoGrow);
+input.addEventListener("keydown", e=>{
+  if(e.key==="Enter" && !e.shiftKey){ e.preventDefault(); handleUser(input.value); }
+});
+
+/* ---- floating particles ---- */
+(function makeParticles(){
+  const box = document.getElementById("particles");
+  const n = window.innerWidth < 640 ? 14 : 26;
+  for(let i=0;i<n;i++){
+    const p = document.createElement("span");
+    p.className = "particle";
+    const size = 3 + Math.random()*6;
+    p.style.width = p.style.height = size + "px";
+    p.style.left = Math.random()*100 + "vw";
+    p.style.setProperty("--dx", (Math.random()*80-40) + "px");
+    p.style.animationDuration = (11 + Math.random()*14) + "s";
+    p.style.animationDelay = (-Math.random()*20) + "s";
+    p.style.opacity = 0.25 + Math.random()*0.5;
+    box.appendChild(p);
+  }
+})();
+
+/* ---- welcome ---- */
+const WELCOME_HTML = `<span class="tag">WELCOME</span>👋 <b>Welcome to GMIU InfoAssist!</b><br>
+  I'm here to help students and parents with information about <b>Gyanmanjari Innovative University, Bhavnagar</b> — courses, admissions, fees, placements, hostel and more.<br><br>
+  How can I help you today? You can tap a suggestion below or type your question.`;
+
+function renderWelcome(animate){
+  addMsg("bot", WELCOME_HTML, {animate:animate, scroll:false});
+  const qb = el(`<div class="quickbanner" id="quickbanner">
+    <img src="data:image/webp;base64,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" alt="GMIU quick links">
+    <div class="qb-cap"><span class="qb-dot"></span>QUICK LINKS · TAP A QUESTION BELOW</div>
+  </div>`);
+  if(animate === false) qb.style.animation = "none";
+  chat.appendChild(qb);
+  if(animate !== false) smoothScroll();
+}
+
+/* =========================================================================
+   CHAT HISTORY (localStorage) — ChatGPT-style sidebar
+   ========================================================================= */
+const LS_KEY = "gmiu_infoassist_chats_v1";
+let chats = [];
+let activeId = null;
+
+function uid(){ return "c" + Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+
+function loadStore(){
+  try{ const raw = localStorage.getItem(LS_KEY); chats = raw ? JSON.parse(raw) : []; }
+  catch(e){ chats = []; }
+  if(!Array.isArray(chats)) chats = [];
+}
+function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(chats)); }catch(e){} }
+function getActive(){ return chats.find(c=>c.id===activeId) || null; }
+
+function titleFrom(text){
+  let t = (text||"").replace(/<[^>]*>/g,"").replace(/\s+/g," ").trim();
+  if(!t) t = "New chat";
+  return t.length > 34 ? t.slice(0,34).trim() + "…" : t;
+}
+
+function renderList(){
+  chatListEl.innerHTML = "";
+  if(!chats.length){
+    chatListEl.appendChild(el(`<div style="padding:14px 12px;font-size:12px;color:#6b7c96;line-height:1.6">No chats yet.<br>Start a new chat to see it here.</div>`));
+    return;
+  }
+  chats.forEach((c,i)=>{
+    const item = el(`<button class="sb-item${c.id===activeId?" active":""}">
+        <span class="sb-ico">💬</span>
+        <span class="sb-title"></span>
+        <span class="sb-del" title="Delete chat">✕</span>
+      </button>`);
+    item.querySelector(".sb-title").textContent = c.title || "New chat";
+    item.style.animationDelay = (0.05 + Math.min(i,10)*0.04) + "s";
+    item.onclick = (e)=>{
+      if(e.target.classList.contains("sb-del")){ e.stopPropagation(); deleteChat(c.id); return; }
+      openChat(c.id);
+    };
+    chatListEl.appendChild(item);
+  });
+}
+
+function persistActive(){
+  const c = getActive();
+  if(!c) return;
+  c.msgs = [];
+  chat.querySelectorAll(".msg").forEach(m=>{
+    const role = m.classList.contains("user") ? "user" : "bot";
+    const b = m.querySelector(".bubble");
+    if(b) c.msgs.push({role, html:b.innerHTML});
+  });
+  saveStore();
+}
+
+function renderThread(c, animate){
+  chat.innerHTML = "";
+  if(animate === false) chat.classList.add("instant");
+  c.msgs.forEach(m=>addMsg(m.role, m.html, {animate:animate, scroll:false}));
+  if(animate === false) chat.classList.remove("instant");
+  smoothScroll();
+}
+
+function newChat(){
+  persistActive();
+  const c = {id:uid(), title:"New chat", ts:Date.now(), msgs:[]};
+  chats.unshift(c);
+  activeId = c.id;
+  saveStore();
+  renderList();
+  chat.innerHTML = "";
+  renderWelcome(true);
+  closeSidebarMobile();
+  input.focus();
+}
+
+function openChat(id){
+  if(id === activeId){ closeSidebarMobile(); return; }
+  persistActive();
+  activeId = id;
+  const c = getActive();
+  if(!c) return;
+  renderList();
+  renderThread(c, true);
+  closeSidebarMobile();
+}
+
+function deleteChat(id){
+  chats = chats.filter(c=>c.id!==id);
+  if(activeId === id){
+    if(chats.length){ activeId = chats[0].id; saveStore(); renderList(); renderThread(getActive(), true); }
+    else { activeId = null; saveStore(); renderList(); chat.innerHTML = ""; renderWelcome(true); }
+  } else { saveStore(); renderList(); }
+}
+
+function isMobile(){ return window.matchMedia("(max-width:860px)").matches; }
+function closeSidebarMobile(){ app.classList.remove("sb-open"); }
+function toggleSidebar(){ if(isMobile()) app.classList.toggle("sb-open"); else app.classList.toggle("sb-collapsed"); }
+
+newChatBtn.onclick = (e)=>{ ripple(e, newChatBtn); newChat(); };
+collapseBtn.onclick = ()=>{ app.classList.add("sb-collapsed"); };
+menuBtn.onclick = ()=>{ toggleSidebar(); };
+backdrop.onclick = ()=>{ closeSidebarMobile(); };
+window.addEventListener("keydown", e=>{ if(e.key==="Escape") closeSidebarMobile(); });
+
+/* ---- boot ---- */
+loadStore();
+if(chats.length){
+  activeId = chats[0].id;
+  renderList();
+  renderThread(getActive(), false);
+} else {
+  const c = {id:uid(), title:"New chat", ts:Date.now(), msgs:[]};
+  chats.unshift(c); activeId = c.id; saveStore();
+  renderList();
+  renderWelcome(true);
+}
+renderSuggestions(STARTERS);
+input.focus();
+</script>
+</body>
+</html>
